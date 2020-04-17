@@ -1,0 +1,60 @@
+﻿@{
+    ViewBag.Title = "Desafio DropDown";
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <h2>Desafio Tiago</h2>
+        <p>
+            Nesse desafio iremos criar dois DropDownList, um conterá os Estados do nosso país, e o outro as cidades do referido Estado, aquele deve ter os Estados carregados assim que a página é aberta, e este deve carregar as cidades apenas após o usuário selecionar o Estado.
+        </p>
+        <p>
+            Deve contem um action result para acessar.
+        </p>
+        <p>
+            Deve utilizar ajax para buscar as cidades.
+        </p>
+        <p>
+            Deve também utilizar json.
+        </p>
+        <p>
+            Que os jogos comecem!
+        </p>
+
+        <h1>Estados</h1>
+        <p>
+            @Html.DropDownList("EstadosList", null, String.Empty, new { @id = "Estado" })
+        </p>
+        <p>
+            @Html.DropDownList("CidadesList",null,new { @id = "Cidades" })
+        </p>
+        
+    </div>
+</div>
+
+<script type="text/javascript" language="javascript">
+    document.getElementById('Estado').onchange = function () {        
+        var EstadoSelecionado = $("#Estado").val();
+        var Cidades = $('#Cidades');      
+        if (EstadoSelecionado != null && EstadoSelecionado != '') {
+            Cidades.empty();
+            $.getJSON('@Url.Action("Cidades","Home")', { id: EstadoSelecionado }, function (CidadesRetorno) {
+                if (CidadesRetorno != null && !jQuery.isEmptyObject(CidadesRetorno))
+                {
+                    Cidades.append($('<option/>', {
+                        value: null,
+                        text: ""
+                    }));
+                    $.each(CidadesRetorno, function (index, Cidade) {
+                        Cidades.append($('<option/>', {
+                            value: Cidade.ID,
+                            text: Cidade.Nome
+                        }));
+                    });
+                };
+            });
+        }
+
+    };
+
+</script>
